@@ -158,16 +158,16 @@ public class IDData implements SmartCardReadable {
 		}
 
 		// Contains the birth date, this can take several formats,
-		Date birthDate;
-		try {
-			birthDate = fTLV.dateData((byte) 0x0C, "dd MMM yyyy");
-		} catch (final ParseException e) {
-			try {
-				birthDate = fTLV.dateData((byte) 0x0C, "dd MMM  yyyy");
-			} catch (final ParseException e1) {
-				birthDate = fTLV.dateData((byte) 0x0C, "dd.MMM.yyyy");
-			}
-		}
+	        Date birthDate = new Date(0);
+	        String[] formats = {"dd MMM yyyy", "dd MMM  yyyy", "dd.MMM.yyyy", "yyyy"};
+	        for (String fmt : formats) {
+	            try {
+	                birthDate = fTLV.dateData((byte) 0x0C, fmt);
+	            } catch (final ParseException e) {
+	                continue;
+	            }
+	            break;
+	        }
 		
 		return new IDData(
 				fTLV.stringData((byte) 0x01), 
@@ -250,7 +250,7 @@ public class IDData implements SmartCardReadable {
 							+ "is valid.");
 		}
 
-		if (birthDate.after(new Date())) {
+		if (birthDate != null && birthDate.after(new Date())) {
 			throw new IllegalArgumentException(
 					"The birth date can't be a date in the future.");
 		}
