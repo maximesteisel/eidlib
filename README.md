@@ -1,4 +1,4 @@
-*** NOTE: I am no longer maintaining this project. *** 
+*** This is an unofficial fork of KeejOow original library *** 
 
 # Native Java e-ID library
 
